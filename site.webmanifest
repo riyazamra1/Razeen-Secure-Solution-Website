@@ -1,0 +1,18 @@
+{
+  "name": "Razeen Secure Solutions",
+  "short_name": "Razeen Secure",
+  "description": "Technology, software, cloud, AI, CCTV security, networking and IT solutions.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090a0c",
+  "theme_color": "#090a0c",
+  "icons": [
+    {
+      "src": "/assets/logos/razeen-secure-solution-logo-only.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
