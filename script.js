@@ -20,8 +20,12 @@
     document.documentElement.dataset.theme=theme;
     localStorage.setItem('rss-theme',theme);
     if(appearanceToggle){
-      appearanceToggle.querySelector('span').textContent=theme==='dark'?'☾':'☼';
+      const icon=appearanceToggle.querySelector('.appearance-icon')||appearanceToggle.querySelector('span');
+      const label=appearanceToggle.querySelector('.appearance-label');
+      if(icon) icon.textContent=theme==='dark'?'☾':'☼';
+      if(label) label.textContent=theme==='dark'?'Light':'Dark';
       appearanceToggle.setAttribute('aria-label',theme==='dark'?'Switch to light appearance':'Switch to dark appearance');
+      appearanceToggle.setAttribute('aria-pressed',String(theme==='dark'));
     }
   };
   applyTheme(savedTheme);
@@ -32,7 +36,6 @@
 
   const fixes=document.createElement('style');
   fixes.textContent=`
-    /* RSS website: light is the default, appearance toggle remains enabled */
     :root{--bg:#f7f7f4;--panel:#ffffff;--panel2:#f0f0ec;--text:#171717;--muted:#666660;--gold:#b88622;--gold2:#d3a743;--line:rgba(20,20,20,.10);--line-gold:rgba(184,134,34,.30);--shadow:rgba(0,0,0,.12)}
     :root[data-theme="dark"]{--bg:#070809;--panel:#0d0f11;--panel2:#111417;--text:#f7f5ef;--muted:#a7a49b;--gold:#d5ad52;--gold2:#f0d27a;--line:rgba(255,255,255,.09);--line-gold:rgba(213,173,82,.28);--shadow:rgba(0,0,0,.48)}
     html,body{background:var(--bg)!important;color:var(--text)!important}
@@ -45,8 +48,13 @@
     .site-header .brand img,.site-header .brand .brand-logo{width:auto!important;height:auto!important;max-width:275px!important;max-height:56px!important;object-fit:contain!important;object-position:left center!important}
     .nav a{color:#4f4f49!important}.nav a:hover{color:#8d6515!important;background:rgba(184,134,34,.07)!important}
     :root[data-theme="dark"] .nav a{color:#bdb9ae!important}:root[data-theme="dark"] .nav a:hover{color:var(--gold2)!important}
-    .appearance-toggle{display:grid!important;color:var(--text)!important;background:rgba(20,20,20,.04)!important;border-color:rgba(20,20,20,.12)!important}
-    :root[data-theme="dark"] .appearance-toggle{background:rgba(255,255,255,.035)!important;border-color:var(--line)!important}
+    /* Floating appearance button: clear icon + current action, not a tiny header switch. */
+    .appearance-toggle{position:fixed!important;right:22px!important;bottom:22px!important;z-index:120!important;width:auto!important;min-width:92px!important;height:44px!important;padding:0 14px!important;border-radius:999px!important;border:1px solid rgba(184,134,34,.38)!important;background:rgba(255,255,255,.94)!important;color:#171717!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;box-shadow:0 12px 34px rgba(0,0,0,.16),0 0 0 1px rgba(255,255,255,.25) inset!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;cursor:pointer!important;font:700 11px/1 Inter,ui-sans-serif,system-ui,sans-serif!important;letter-spacing:.03em!important;transition:transform .2s,box-shadow .2s,border-color .2s!important}
+    .appearance-toggle:hover{transform:translateY(-3px)!important;box-shadow:0 16px 38px rgba(0,0,0,.20),0 0 0 1px rgba(184,134,34,.16) inset!important}
+    .appearance-toggle:focus-visible{outline:2px solid var(--gold)!important;outline-offset:3px!important}
+    .appearance-icon{font-size:18px!important;line-height:1!important}
+    .appearance-label{font-size:10px!important;text-transform:uppercase!important;letter-spacing:.12em!important}
+    :root[data-theme="dark"] .appearance-toggle{background:rgba(14,16,18,.92)!important;color:#f7f5ef!important;border-color:rgba(213,173,82,.34)!important;box-shadow:0 12px 34px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.04) inset!important}
     .header-actions{margin-left:8px!important}
     .btn-outline{color:#171717!important;background:#fff!important;border-color:rgba(20,20,20,.14)!important}
     :root[data-theme="dark"] .btn-outline{color:var(--text)!important;background:rgba(255,255,255,.025)!important;border-color:var(--line)!important}
@@ -69,12 +77,12 @@
     :root[data-theme="dark"] .contact-card{background:linear-gradient(145deg,rgba(213,173,82,.08),#0e1012)!important}:root[data-theme="dark"] .contact-card a{color:#c4c0b7!important}
     .footer{color:#777!important;border-top-color:rgba(20,20,20,.10)!important}.footer img{width:180px!important;height:auto!important;max-height:44px!important;object-fit:contain!important}.footer>div{gap:14px!important}
     @media(max-width:1000px){.site-header .brand img,.site-header .brand .brand-logo{max-width:245px!important;max-height:50px!important}}
-    @media(max-width:760px){.site-header{height:76px!important}.site-header .brand{height:48px!important}.site-header .brand img,.site-header .brand .brand-logo{max-width:210px!important;max-height:44px!important}.footer img{width:145px!important;max-height:38px!important}.nav{background:#fff!important;border-color:rgba(20,20,20,.10)!important;box-shadow:0 20px 50px rgba(0,0,0,.12)!important}:root[data-theme="dark"] .nav{background:#101214!important;border-color:var(--line)!important;box-shadow:0 20px 50px var(--shadow)!important}}
+    @media(max-width:760px){.site-header{height:76px!important}.site-header .brand{height:48px!important}.site-header .brand img,.site-header .brand .brand-logo{max-width:210px!important;max-height:44px!important}.footer img{width:145px!important;max-height:38px!important}.nav{background:#fff!important;border-color:rgba(20,20,20,.10)!important;box-shadow:0 20px 50px rgba(0,0,0,.12)!important}:root[data-theme="dark"] .nav{background:#101214!important;border-color:var(--line)!important;box-shadow:0 20px 50px var(--shadow)!important}.appearance-toggle{right:14px!important;bottom:14px!important;min-width:82px!important;height:42px!important;padding:0 12px!important}}
   `;
   document.head.appendChild(fixes);
 
   const footerLogo=document.querySelector('.footer img');
-  if(footerLogo) footerLogo.src='assets/logos/razeen-secure-solution-logo.png';
+  if(footerLogo) footerLogo.src='assets/logos/razeen-secure-solution-logo.png?v=20260902';
 
   document.querySelectorAll('.product-top img').forEach(img=>{
     img.style.maxWidth='108px';
@@ -82,5 +90,6 @@
     img.style.width='auto';
     img.style.height='auto';
     img.style.objectFit='contain';
+    if(img.src.includes('rss-ai-assistant-logo.png')) img.src='assets/logos/rss-ai-assistant-logo.png?v=20260902';
   });
 })();
