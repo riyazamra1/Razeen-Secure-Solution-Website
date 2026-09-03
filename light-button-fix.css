@@ -1,0 +1,5 @@
+/* Light-mode primary CTA: match the gold Explorer RSS products button */
+html[data-theme="light"] .hero .btn-gold,
+html:not([data-theme="dark"]) .hero .btn-gold{background:linear-gradient(135deg,#b88622,#d3a743)!important;color:#fff!important;border-color:#b88622!important;box-shadow:0 12px 30px rgba(184,134,34,.24)!important}
+html[data-theme="light"] .hero .btn-gold:hover,
+html:not([data-theme="dark"]) .hero .btn-gold:hover{background:linear-gradient(135deg,#a57416,#c29432)!important;color:#fff!important;transform:translateY(-2px)!important;box-shadow:0 16px 36px rgba(184,134,34,.30)!important}
