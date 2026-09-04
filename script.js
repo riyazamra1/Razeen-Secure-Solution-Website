@@ -1,11 +1,12 @@
 (()=>{
   const root=document.documentElement,body=document.body;
-  const UI='site-ui.css?v=20260903b';
+  const UI='site-ui.css?v=20260904a';
   if(!document.querySelector('link[data-rss-ui]')){const link=document.createElement('link');link.rel='stylesheet';link.href=UI;link.dataset.rssUi='1';document.head.appendChild(link)}
   const menuButton=document.querySelector('.menu-btn'),nav=document.querySelector('.nav');
-  if(menuButton&&nav&&!menuButton.dataset.bound){menuButton.dataset.bound='1';menuButton.addEventListener('click',()=>{const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close menu':'Open menu');menuButton.textContent=open?'×':'☰'});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');menuButton.textContent='☰'}))}
+  const closeMenu=()=>{if(nav){nav.classList.remove('open')}if(menuButton){menuButton.setAttribute('aria-expanded','false');menuButton.setAttribute('aria-label','Open menu');menuButton.textContent='☰'}};
+  if(menuButton&&nav&&!menuButton.dataset.bound){menuButton.dataset.bound='1';menuButton.addEventListener('click',e=>{e.stopPropagation();const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));menuButton.setAttribute('aria-label',open?'Close menu':'Open menu');menuButton.textContent=open?'×':'☰'});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==menuButton)closeMenu()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()})}
   const appearanceToggle=document.querySelector('.appearance-toggle');
-  if(appearanceToggle){appearanceToggle.innerHTML='<span class="appearance-switch" aria-hidden="true"><span class="appearance-switch-knob"></span></span><span class="appearance-label">Dark</span>';appearanceToggle.setAttribute('role','switch')}
+  if(appearanceToggle&&!appearanceToggle.dataset.initialized){appearanceToggle.dataset.initialized='1';appearanceToggle.innerHTML='<span class="appearance-switch" aria-hidden="true"><span class="appearance-switch-knob"></span></span><span class="appearance-label">Dark</span>';appearanceToggle.setAttribute('role','switch')}
   const applyTheme=theme=>{root.dataset.theme=theme;localStorage.setItem('rss-theme',theme);if(appearanceToggle){appearanceToggle.classList.toggle('is-dark',theme==='dark');const label=appearanceToggle.querySelector('.appearance-label');if(label)label.textContent=theme==='dark'?'Light':'Dark';appearanceToggle.setAttribute('aria-checked',String(theme==='dark'));appearanceToggle.setAttribute('aria-label',theme==='dark'?'Switch to light appearance':'Switch to dark appearance')}};
   applyTheme(localStorage.getItem('rss-theme')||'light');
   if(appearanceToggle&&!appearanceToggle.dataset.bound){appearanceToggle.dataset.bound='1';appearanceToggle.addEventListener('click',()=>applyTheme(root.dataset.theme==='dark'?'light':'dark'))}
