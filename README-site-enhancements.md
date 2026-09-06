@@ -1,0 +1,1 @@
+Site enhancement assets added for the requested visual system: light-first appearance, rounded/shadow cards, continuously animated button borders with hover/active states, vertical scroll percentage progress, and bidirectional sticky-header scroll behavior. These assets are intended to be loaded site-wide.
