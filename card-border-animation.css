@@ -1,0 +1,88 @@
+/* Razeen Secure Solution — animated card borders */
+:root {
+  --rss-card-radius: 22px;
+  --rss-border-speed: 7s;
+  --rss-border-opacity: .78;
+}
+
+.rss-card,
+.service-card,
+.project-card,
+.product-card,
+.offer-card,
+.card,
+[class*="project-card"],
+[class*="service-card"],
+[class*="product-card"],
+[class*="offer-card"] {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid transparent;
+  border-radius: var(--rss-card-radius);
+  background:
+    linear-gradient(var(--card-bg, var(--surface, #fff)), var(--card-bg, var(--surface, #fff))) padding-box,
+    conic-gradient(from 0deg, #00d9ff, #667cff, #a855f7, #00d9ff) border-box;
+  background-size: 100% 100%, 100% 100%;
+  animation: rss-card-border-spin var(--rss-border-speed) linear infinite;
+  box-shadow: 0 10px 30px rgb(0 0 0 / .08);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.rss-card::after,
+.service-card::after,
+.project-card::after,
+.product-card::after,
+.offer-card::after,
+.card::after,
+[class*="project-card"]::after,
+[class*="service-card"]::after,
+[class*="product-card"]::after,
+[class*="offer-card"]::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(from 0deg, #00d9ff, #667cff, #a855f7, #00d9ff);
+  filter: blur(12px);
+  opacity: var(--rss-border-opacity);
+  animation: rss-card-border-spin var(--rss-border-speed) linear infinite;
+}
+
+.rss-card:hover,
+.service-card:hover,
+.project-card:hover,
+.product-card:hover,
+.offer-card:hover,
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgb(0 0 0 / .14);
+}
+
+@keyframes rss-card-border-spin {
+  to { background-position: 100% 100%, 100% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rss-card,
+  .service-card,
+  .project-card,
+  .product-card,
+  .offer-card,
+  .card,
+  .rss-card::after,
+  .service-card::after,
+  .project-card::after,
+  .product-card::after,
+  .offer-card::after,
+  .card::after { animation: none; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .rss-card,
+  .service-card,
+  .project-card,
+  .product-card,
+  .offer-card,
+  .card { box-shadow: 0 12px 32px rgb(0 0 0 / .28); }
+}
