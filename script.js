@@ -4,6 +4,7 @@ if(!document.querySelector('link[data-rss-fix]')){const l=document.createElement
 const setupAppearance=button=>{if(button.dataset.rssReady==='1')return;button.dataset.rssReady='1';button.innerHTML='<span class="knob"></span>';const setTheme=t=>{root.dataset.theme=t;localStorage.setItem('rss-theme',t);button.classList.toggle('dark',t==='dark');button.setAttribute('aria-checked',t==='dark');button.setAttribute('aria-label',t==='dark'?'Switch to light appearance':'Switch to dark appearance');button.setAttribute('title',t==='dark'?'Switch to light appearance':'Switch to dark appearance')};setTheme(localStorage.getItem('rss-theme')||'dark');button.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'))};
 const header=document.querySelector('.site-header');
 if(header){
+ header.querySelectorAll('.brand img,.brand-logo').forEach(img=>{img.src=asset+'rss-logo-name.png';img.alt='Razeen Secure Solution'});
  let actions=header.querySelector('.header-actions');if(!actions){actions=document.createElement('div');actions.className='header-actions';header.appendChild(actions)}
  let appearance=header.querySelector('.appearance-toggle');if(!appearance){appearance=document.createElement('button');appearance.className='appearance-toggle';appearance.type='button';actions.prepend(appearance)}else if(appearance.parentElement!==actions)actions.prepend(appearance);setupAppearance(appearance);
  let nav=header.querySelector('.nav');if(!nav){nav=document.createElement('nav');nav.className='nav';nav.id='mainNav';header.insertBefore(nav,actions)}
