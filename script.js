@@ -1,16 +1,63 @@
 (()=>{
 const root=document.documentElement,body=document.body;
+const asset='assets/logos/';
 if(!document.querySelector('link[data-rss-fix]')){const l=document.createElement('link');l.rel='stylesheet';l.href='site-fixes.css?v=20260906';l.dataset.rssFix='1';document.head.appendChild(l)}
-const appearance=document.querySelector('.appearance-toggle');
-const setupAppearance=(button)=>{button.innerHTML='<span class="knob"></span>';const setTheme=t=>{root.dataset.theme=t;localStorage.setItem('rss-theme',t);button.classList.toggle('dark',t==='dark');button.setAttribute('aria-checked',t==='dark');button.setAttribute('aria-label',t==='dark'?'Switch to light appearance':'Switch to dark appearance')};setTheme(localStorage.getItem('rss-theme')||'dark');button.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'))};
-if(appearance)setupAppearance(appearance);
-const menu=document.querySelector('.menu-btn'),nav=document.querySelector('.nav');if(menu&&nav){menu.addEventListener('click',e=>{e.stopPropagation();const open=nav.classList.toggle('open');menu.textContent=open?'×':'☰';menu.setAttribute('aria-expanded',open)});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==menu){nav.classList.remove('open');menu.textContent='☰'}})}
+
+/* Global appearance: shared across every RSS page. */
+const setupAppearance=(button)=>{
+ if(button.dataset.rssReady==='1')return;
+ button.dataset.rssReady='1';
+ button.innerHTML='<span class="knob"></span>';
+ const setTheme=t=>{root.dataset.theme=t;localStorage.setItem('rss-theme',t);button.classList.toggle('dark',t==='dark');button.setAttribute('aria-checked',t==='dark');button.setAttribute('aria-label',t==='dark'?'Switch to light appearance':'Switch to dark appearance');button.setAttribute('title',t==='dark'?'Switch to light appearance':'Switch to dark appearance')};
+ setTheme(localStorage.getItem('rss-theme')||'dark');
+ button.addEventListener('click',()=>setTheme(root.dataset.theme==='dark'?'light':'dark'));
+};
+
+let header=document.querySelector('.site-header');
+if(header){
+ let actions=header.querySelector('.header-actions');
+ if(!actions){actions=document.createElement('div');actions.className='header-actions';header.appendChild(actions)}
+ let appearance=actions.querySelector('.appearance-toggle')||header.querySelector('.appearance-toggle');
+ if(appearance&&appearance.parentElement!==actions)actions.prepend(appearance);
+ if(!appearance){appearance=document.createElement('button');appearance.className='appearance-toggle';appearance.type='button';appearance.setAttribute('aria-label','Toggle appearance');actions.prepend(appearance)}
+ setupAppearance(appearance);
+ let nav=header.querySelector('.nav');
+ if(!nav){nav=document.createElement('nav');nav.className='nav';nav.id='mainNav';header.insertBefore(nav,actions)}
+ if(!nav.children.length){nav.innerHTML='<a href="/">Home</a><a href="/#solutions">Solutions</a><a href="/#projects">Projects</a><a href="/#company">Company</a><a href="about.html">About</a><a href="contact.html">Contact</a>'}
+ let menu=header.querySelector('.menu-btn');
+ if(!menu){menu=document.createElement('button');menu.className='menu-btn';menu.type='button';menu.setAttribute('aria-label','Open menu');menu.setAttribute('aria-expanded','false');menu.textContent='☰';actions.appendChild(menu)}
+ const closeMenu=()=>{nav.classList.remove('open');menu.textContent='☰';menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu')};
+ menu.addEventListener('click',e=>{e.stopPropagation();const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menu.textContent=open?'×':'☰';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu')});
+ nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+ document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==menu)closeMenu()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
+}
+
+/* Every page gets the same large transparent RSS logo and footer navigation. */
+document.querySelectorAll('.footer').forEach(footer=>{
+ const oldLinks=[...footer.querySelectorAll('a')].map(a=>({href:a.getAttribute('href'),text:a.textContent.trim()}));
+ footer.innerHTML='';
+ const brand=document.createElement('div');brand.className='footer-brand';
+ const img=document.createElement('img');img.src=asset+'rss-logo-name.png';img.alt='Razeen Secure Solution';brand.appendChild(img);
+ footer.appendChild(brand);
+ const nav=document.createElement('nav');
+ nav.innerHTML='<a href="/">Home</a><a href="/#solutions">Solutions</a><a href="/#projects">Projects</a><a href="/#company">Company</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';
+ footer.appendChild(nav);
+ const copy=document.createElement('div');copy.className='footer-copy';copy.innerHTML='© <span id="year"></span> Razeen Secure Solution';footer.appendChild(copy);
+});
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
+
 let progress=document.querySelector('.rss-scroll-progress');if(!progress){progress=document.createElement('div');progress.className='rss-scroll-progress';progress.innerHTML='<div class="rss-scroll-progress-track"><div class="rss-scroll-progress-fill"></div></div><span class="rss-scroll-progress-percent">0%</span>';body.appendChild(progress)}
 const fill=progress.querySelector('.rss-scroll-progress-fill'),pct=progress.querySelector('.rss-scroll-progress-percent');const update=()=>{const max=Math.max(1,document.documentElement.scrollHeight-innerHeight),v=Math.min(100,Math.max(0,scrollY/max*100));fill.style.height=v+'%';pct.textContent=Math.round(v)+'%'};addEventListener('scroll',update,{passive:true});addEventListener('resize',update,{passive:true});update();
 const top=document.getElementById('backToTop');if(top){addEventListener('scroll',()=>top.classList.toggle('show',scrollY>500),{passive:true});top.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}))}
 const reveals=document.querySelectorAll('.reveal');if('IntersectionObserver'in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});reveals.forEach(e=>io.observe(e))}else reveals.forEach(e=>e.classList.add('visible'));
-document.querySelectorAll('.footer').forEach(footer=>{if(!footer.querySelector('.footer-site-logo')){const img=document.createElement('img');img.className='footer-site-logo';img.src='assets/logos/razeen-secure-solution-logo.png';img.alt='Razeen Secure Solution';footer.prepend(img)}});
-if(!appearance&&document.querySelector('.project-hero')){const b=document.createElement('button');b.className='appearance-toggle floating-appearance';b.type='button';b.setAttribute('aria-label','Toggle appearance');body.appendChild(b);setupAppearance(b);b.style.display='block'}
-if(document.querySelector('.project-hero')){const hero=document.querySelector('.project-hero'),copy=hero.querySelector('.project-copy');if(copy&&!document.querySelector('.project-details')){const name=(copy.querySelector('h1')?.textContent||document.title).replace(/\s+/g,' ').trim();const intro=copy.querySelector('p')?.textContent||'';const box=document.createElement('div');box.className='project-details';box.innerHTML='<div class="details-dialog glass-panel"><button class="details-close" aria-label="Close details">×</button><div class="eyebrow">PROJECT DETAILS</div><h2>'+name+'</h2><p>'+intro+'</p><p><b>Project status:</b> See the roadmap and feature sections below for the current project direction.</p></div>';body.appendChild(box);const open=document.createElement('button');open.className='btn btn-gold details-open';open.type='button';open.textContent='Project details';const actions=copy.querySelector('.hero-actions');if(actions)actions.prepend(open);const close=()=>box.classList.remove('open');open.addEventListener('click',()=>box.classList.add('open'));box.querySelector('.details-close').addEventListener('click',close);box.addEventListener('click',e=>{if(e.target===box)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()})}}
+
+if(document.querySelector('.project-hero')){
+ const hero=document.querySelector('.project-hero'),copy=hero.querySelector('.project-copy');
+ if(copy&&!document.querySelector('.project-details')){
+  const name=(copy.querySelector('h1')?.textContent||document.title).replace(/\s+/g,' ').trim(),intro=copy.querySelector('p')?.textContent||'';
+  const box=document.createElement('div');box.className='project-details';box.innerHTML='<div class="details-dialog glass-panel"><button class="details-close" aria-label="Close details">×</button><div class="eyebrow">PROJECT DETAILS</div><h2>'+name+'</h2><p>'+intro+'</p><p><b>Project status:</b> See the roadmap and feature sections below for the current project direction.</p></div>';body.appendChild(box);
+  const open=document.createElement('button');open.className='btn btn-gold details-open';open.type='button';open.textContent='Project details';const actions=copy.querySelector('.hero-actions');if(actions)actions.prepend(open);const close=()=>box.classList.remove('open');open.addEventListener('click',()=>box.classList.add('open'));box.querySelector('.details-close').addEventListener('click',close);box.addEventListener('click',e=>{if(e.target===box)close()});document.addEventListener('keydown',e=>{if(e.key==='Escape')close()})
+ }
+}
 })();
