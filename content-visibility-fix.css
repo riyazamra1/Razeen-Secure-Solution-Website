@@ -1,0 +1,6 @@
+/* Ensure homepage content is visible. The sections use the legacy `reveal` class, but the current homepage script does not run a reveal observer. */
+.reveal{opacity:1!important;visibility:visible!important;transform:none!important;filter:none!important}
+.reveal>*{visibility:visible}
+main{display:block!important;visibility:visible!important;opacity:1!important}
+main .section{visibility:visible!important}
+@media(max-width:720px){.hero{min-height:auto!important;grid-template-columns:1fr!important;padding-top:52px!important;padding-bottom:70px!important}.hero-visual{height:430px!important}.cap-grid,.project-grid{grid-template-columns:1fr!important}.section-head{grid-template-columns:1fr!important;gap:18px!important}.company-panel,.contact-section{grid-template-columns:1fr!important;gap:35px!important}.accomplishments-timeline{padding-left:18px!important}}
