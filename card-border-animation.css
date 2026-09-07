@@ -1,1 +1,7 @@
-/* test */
+/* RSS card interaction polish: subtle animated border glow, no lift/scale */
+.glass-card,.project-card,.accomplishment-card{transition:border-color .28s ease,box-shadow .28s ease,transform .28s ease!important}
+.glass-card:hover,.glass-card:focus-visible,.project-card:hover,.project-card:focus-visible,.accomplishment-card:hover,.accomplishment-card:focus-visible{transform:none!important;border-color:rgba(215,179,90,.52)!important;box-shadow:0 0 0 1px rgba(215,179,90,.12),0 0 18px rgba(215,179,90,.16),inset 0 0 18px rgba(215,179,90,.035)!important}
+.project-card:before,.glass-card:before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:conic-gradient(from 0deg,transparent 0 68%,rgba(215,179,90,.75) 76%,transparent 86% 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;pointer-events:none;z-index:2}
+.project-card:hover:before,.project-card:focus-visible:before,.glass-card:hover:before,.glass-card:focus-visible:before{opacity:1;animation:rss-border-glow 2.4s linear infinite}
+@keyframes rss-border-glow{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.glass-card,.project-card,.accomplishment-card{transition:none!important}.project-card:hover:before,.project-card:focus-visible:before,.glass-card:hover:before,.glass-card:focus-visible:before{animation:none!important}}
