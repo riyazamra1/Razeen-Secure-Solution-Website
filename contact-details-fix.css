@@ -4,4 +4,6 @@
 .version-card .contact-details .text-link{font-size:15px;line-height:1.8;color:var(--text);font-weight:500}
 .version-card .contact-details .text-link{color:var(--gold);font-weight:800;text-decoration:none}
 .version-card .contact-details .contact-label{color:var(--muted);font-weight:700}
-@media(max-width:520px){.version-card .contact-details,.version-card .contact-details a,.version-card .contact-details .text-link{font-size:14px;line-height:1.75}}
+/* Global email readability: keep the company email clearly visible on every page that uses this shared fix. */
+a[href^="mailto:"]{font-size:15px!important;line-height:1.6;font-weight:750;letter-spacing:.005em;color:var(--gold)!important}
+@media(max-width:520px){.version-card .contact-details,.version-card .contact-details a,.version-card .contact-details .text-link{font-size:14px;line-height:1.75}a[href^="mailto:"]{font-size:14px!important}}
