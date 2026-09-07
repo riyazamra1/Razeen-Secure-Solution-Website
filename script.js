@@ -13,8 +13,8 @@ if(header){
  const closeMenu=()=>{nav.classList.remove('open');menu.textContent='☰';menu.setAttribute('aria-expanded','false')};
  menu.addEventListener('click',e=>{e.stopPropagation();const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menu.textContent=open?'×':'☰';menu.setAttribute('aria-expanded',String(open))});
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==menu)closeMenu()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
- let lastY=Math.max(0,scrollY),directionY=lastY;
- addEventListener('scroll',()=>{const y=Math.max(0,scrollY),delta=y-lastY;if(y<=24){header.classList.remove('scroll-down');directionY=y;lastY=y;return}if(Math.abs(delta)>=6){if(delta>0&&y>100){header.classList.add('scroll-down');closeMenu()}else if(delta<0){header.classList.remove('scroll-down')}directionY=y;lastY=y}else{lastY=y}},{passive:true});
+ // Header stays visible while scrolling in either direction. No hide-on-scroll state.
+ header.classList.remove('scroll-down');
 }
 document.querySelectorAll('.footer').forEach(footer=>{footer.innerHTML='';const brand=document.createElement('div');brand.className='footer-brand';const img=document.createElement('img');img.src=asset+'rss-logo-name.png';img.alt='Razeen Secure Solution';brand.appendChild(img);footer.appendChild(brand);const nav=document.createElement('nav');nav.innerHTML='<a href="/">Home</a><a href="/#solutions">Solutions</a><a href="/#projects">Projects</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';footer.appendChild(nav);const copy=document.createElement('div');copy.className='footer-copy';copy.innerHTML='© <span id="year"></span> Razeen Secure Solution';footer.appendChild(copy)});
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
