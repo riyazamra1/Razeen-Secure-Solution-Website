@@ -3,4 +3,17 @@
 .reveal>*{visibility:visible}
 main{display:block!important;visibility:visible!important;opacity:1!important}
 main .section{visibility:visible!important}
-@media(max-width:720px){.hero{min-height:auto!important;grid-template-columns:1fr!important;padding-top:52px!important;padding-bottom:70px!important}.hero-visual{height:430px!important}.cap-grid,.project-grid{grid-template-columns:1fr!important}.section-head{grid-template-columns:1fr!important;gap:18px!important}.company-panel,.contact-section{grid-template-columns:1fr!important;gap:35px!important}.accomplishments-timeline{padding-left:18px!important}}
+
+/* RSS Website v1 card system */
+.glass-card,.glass-panel,.project-card,.cap-grid .glass-card,.accomplishment-card,.contact-card{border-radius:22px!important;box-shadow:0 20px 55px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.04)!important}
+.glass-card:hover,.project-card:hover,.accomplishment-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.30),0 0 30px rgba(215,179,90,.06)!important}
+
+/* Project cards: keep the numeric percentage, remove the horizontal progress bar. */
+.project-card .progress{display:none!important}
+
+/* Middle scroll indicator: show only the numeric percentage, not a progress bar. */
+.rss-scroll-progress-track{display:none!important}
+.rss-scroll-progress{left:12px;right:auto;gap:0!important}
+.rss-scroll-progress-percent{font-size:9px!important;font-weight:900!important}
+
+@media(max-width:720px){.hero{min-height:auto!important;grid-template-columns:1fr!important;padding-top:52px!important;padding-bottom:70px!important}.hero-visual{height:430px!important}.cap-grid,.project-grid{grid-template-columns:1fr!important}.section-head{grid-template-columns:1fr!important;gap:18px!important}.company-panel,.contact-section{grid-template-columns:1fr!important;gap:35px!important}.accomplishments-timeline{padding-left:18px!important}.rss-scroll-progress{left:7px!important}.rss-scroll-progress-percent{font-size:8px!important}}
