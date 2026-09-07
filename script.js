@@ -10,11 +10,14 @@ if(header){
  let nav=header.querySelector('.nav');if(!nav){nav=document.createElement('nav');nav.className='nav';nav.id='mainNav';header.insertBefore(nav,actions)}
  if(!nav.children.length)nav.innerHTML='<a href="/">Home</a><a href="/#solutions">Solutions</a><a href="/#projects">Projects</a><a href="/#company">Company</a><a href="about.html">About</a><a href="contact.html">Contact</a>';
  let menu=header.querySelector('.menu-btn');if(!menu){menu=document.createElement('button');menu.className='menu-btn';menu.type='button';menu.textContent='☰';menu.setAttribute('aria-expanded','false')}if(menu.parentElement!==actions)actions.appendChild(menu);
- const closeMenu=()=>{nav.classList.remove('open');menu.textContent='☰';menu.setAttribute('aria-expanded','false')};
- menu.addEventListener('click',e=>{e.stopPropagation();const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menu.textContent=open?'×':'☰';menu.setAttribute('aria-expanded',String(open))});
+ const closeMenu=()=>{nav.classList.remove('open');menu.textContent='☰';menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu')};
+ menu.addEventListener('click',e=>{e.stopPropagation();const open=!nav.classList.contains('open');nav.classList.toggle('open',open);menu.textContent=open?'×':'☰';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Close menu':'Open menu')});
  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));document.addEventListener('click',e=>{if(nav.classList.contains('open')&&!nav.contains(e.target)&&e.target!==menu)closeMenu()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
- // Header stays visible while scrolling in either direction. No hide-on-scroll state.
- header.classList.remove('scroll-down');
+ // Sticky header is permanently visible in both scroll directions.
+ header.classList.remove('scroll-down');header.style.transform='translateY(0)';header.style.transition='box-shadow .28s ease';
+ // Highlight the current homepage section without changing cross-page navigation.
+ const sectionLinks=[...nav.querySelectorAll('a[href^="#"]')];const sections=sectionLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+ if(sectionLinks.length&&sections.length){const setActive=()=>{let current='';sections.forEach(section=>{if(section.getBoundingClientRect().top<=header.offsetHeight+120)current=section.id});sectionLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+current))};addEventListener('scroll',setActive,{passive:true});addEventListener('resize',setActive,{passive:true});setActive()}
 }
 document.querySelectorAll('.footer').forEach(footer=>{footer.innerHTML='';const brand=document.createElement('div');brand.className='footer-brand';const img=document.createElement('img');img.src=asset+'rss-logo-name.png';img.alt='Razeen Secure Solution';brand.appendChild(img);footer.appendChild(brand);const nav=document.createElement('nav');nav.innerHTML='<a href="/">Home</a><a href="/#solutions">Solutions</a><a href="/#projects">Projects</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>';footer.appendChild(nav);const copy=document.createElement('div');copy.className='footer-copy';copy.innerHTML='© <span id="year"></span> Razeen Secure Solution';footer.appendChild(copy)});
 const year=document.getElementById('year');if(year)year.textContent=new Date().getFullYear();
