@@ -1,0 +1,11 @@
+/* RSS Website v1 — card number cleanup + site-wide controls */
+.project-card .project-logo-row > span,
+.cap-grid .index,
+.glass-card .index,
+.accomplishment-card .accomplishment-number{display:none!important}
+.project-card .project-logo-row{justify-content:flex-start!important}
+#backToTop{right:22px!important;bottom:22px!important;width:44px;height:44px;border:1px solid color-mix(in srgb,var(--gold) 42%,var(--line));border-radius:50%;background:color-mix(in srgb,var(--panel-strong) 82%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);color:var(--gold);font-size:19px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.16);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .25s ease,visibility .25s ease,transform .25s ease,box-shadow .25s ease}
+#backToTop.show{opacity:1;visibility:visible;transform:none}
+#backToTop:hover,#backToTop:focus-visible{box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 55%,transparent),0 0 22px color-mix(in srgb,var(--gold) 22%,transparent)}
+@media(max-width:520px){#backToTop{right:16px!important;bottom:16px!important;width:40px;height:40px;font-size:17px}}
+@media(prefers-reduced-motion:reduce){#backToTop{transition:none!important}}
