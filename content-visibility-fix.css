@@ -8,12 +8,20 @@ main .section{visibility:visible!important}
 .glass-card,.glass-panel,.project-card,.cap-grid .glass-card,.accomplishment-card,.contact-card{border-radius:22px!important;box-shadow:0 20px 55px rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.04)!important}
 .glass-card:hover,.project-card:hover,.accomplishment-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.30),0 0 30px rgba(215,179,90,.06)!important}
 
-/* Project cards: keep the numeric percentage, remove the horizontal progress bar. */
+/* Project cards: remove the horizontal progress bars; keep the numeric percentage. */
 .project-card .progress{display:none!important}
 
-/* Middle scroll indicator: show only the numeric percentage, not a progress bar. */
-.rss-scroll-progress-track{display:none!important}
-.rss-scroll-progress{left:12px;right:auto;gap:0!important}
-.rss-scroll-progress-percent{font-size:9px!important;font-weight:900!important}
+/* Middle scroll progress: keep the vertical bar AND numeric percentage. */
+.rss-scroll-progress{left:auto!important;right:12px!important;gap:7px!important}
+.rss-scroll-progress-track{display:block!important;width:5px!important;height:110px!important;padding:1px!important;border:1px solid color-mix(in srgb,var(--gold) 34%,var(--line))!important;border-radius:999px!important;background:color-mix(in srgb,var(--panel-strong) 72%,transparent)!important;overflow:hidden!important}
+.rss-scroll-progress-fill{display:block!important;height:0;width:100%;border-radius:999px;background:linear-gradient(180deg,var(--gold2),var(--gold));box-shadow:0 0 12px color-mix(in srgb,var(--gold) 45%,transparent);transition:height .18s cubic-bezier(.2,.8,.2,1)}
+.rss-scroll-progress-percent{font-size:7px!important;line-height:1;color:var(--gold)!important;font-weight:900!important;letter-spacing:.02em;text-shadow:0 0 8px color-mix(in srgb,var(--gold) 20%,transparent)}
 
-@media(max-width:720px){.hero{min-height:auto!important;grid-template-columns:1fr!important;padding-top:52px!important;padding-bottom:70px!important}.hero-visual{height:430px!important}.cap-grid,.project-grid{grid-template-columns:1fr!important}.section-head{grid-template-columns:1fr!important;gap:18px!important}.company-panel,.contact-section{grid-template-columns:1fr!important;gap:35px!important}.accomplishments-timeline{padding-left:18px!important}.rss-scroll-progress{left:7px!important}.rss-scroll-progress-percent{font-size:8px!important}}
+/* Sticky header: remain available while scrolling in BOTH directions. */
+.site-header{position:sticky!important;top:0!important;z-index:100!important;transform:none!important;visibility:visible!important}
+.site-header.scroll-down{transform:none!important;visibility:visible!important}
+.site-header.scroll-up{transform:none!important;visibility:visible!important}
+
+@media(max-width:720px){.hero{min-height:auto!important;grid-template-columns:1fr!important;padding-top:52px!important;padding-bottom:70px!important}.hero-visual{height:430px!important}.cap-grid,.project-grid{grid-template-columns:1fr!important}.section-head{grid-template-columns:1fr!important;gap:18px!important}.company-panel,.contact-section{grid-template-columns:1fr!important;gap:35px!important}.accomplishments-timeline{padding-left:18px!important}.rss-scroll-progress{right:7px!important;left:auto!important}.rss-scroll-progress-track{width:4px!important;height:82px!important}.rss-scroll-progress-percent{font-size:7px!important}}
+
+@media(prefers-reduced-motion:reduce){.rss-scroll-progress-fill{transition:none}}
