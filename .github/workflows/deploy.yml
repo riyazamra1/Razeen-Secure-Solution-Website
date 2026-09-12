@@ -38,6 +38,7 @@ jobs:
             --exclude='.git/' \
             --exclude='.github/' \
             --exclude='.user.ini' \
+            --exclude='rss-puzzle/' \
             --rsync-path="sudo rsync" \
             -e "ssh $SSH_OPTS -o StrictHostKeyChecking=no" \
             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
