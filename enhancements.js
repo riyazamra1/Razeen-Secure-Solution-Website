@@ -39,6 +39,25 @@ addEventListener('scroll',updateProgress,{passive:true});
 addEventListener('resize',updateProgress,{passive:true});
 updateProgress();
 
+/* Logo reliability: use the real RSS logo asset, bust stale caches, and fall back to the RSS mark if a server/cache returns an error. */
+const logoUrl='assets/logos/rss-logo-name.png?v=20260916';
+const logoFallback='assets/logos/rss-logo-only.png?v=20260916';
+const repairLogo=(img,alt)=>{
+  if(!img)return;
+  img.alt=alt||img.alt||'Razeen Secure Solution';
+  if(!img.dataset.rssLogoRepair){
+    img.dataset.rssLogoRepair='1';
+    img.addEventListener('error',()=>{
+      if(img.dataset.rssLogoFallback!=='1'){
+        img.dataset.rssLogoFallback='1';
+        img.src=logoFallback;
+      }
+    },{once:true});
+  }
+  if(!img.src.includes('rss-logo-name.png')) img.src=logoUrl;
+};
+document.querySelectorAll('.site-header .brand img').forEach(img=>repairLogo(img,'Razeen Secure Solution'));
+
 /* Keep exactly one footer logo: rss-logo-name.png. */
 document.querySelectorAll('.footer').forEach(footer=>{
   const existing=footer.querySelectorAll('img');
@@ -50,8 +69,7 @@ document.querySelectorAll('.footer').forEach(footer=>{
   brand.querySelectorAll('img').forEach((img,i)=>{if(i>0)img.remove();});
   let img=brand.querySelector('img');
   if(!img){img=document.createElement('img');brand.prepend(img);}
-  img.src='assets/logos/rss-logo-name.png';
-  img.alt='Razeen Secure Solution';
+  repairLogo(img,'Razeen Secure Solution');
   brand.querySelectorAll('div').forEach(el=>el.remove());
   footer.querySelectorAll(':scope > img, :scope > .footer-site-logo').forEach(el=>el.remove());
 });
