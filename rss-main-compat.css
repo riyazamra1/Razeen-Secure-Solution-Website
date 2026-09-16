@@ -1,0 +1,11 @@
+/* Main-page compatibility layer: restore the original footer layout while keeping the current logo asset. */
+.footer{max-width:1184px!important;margin:auto!important;padding:28px 0 45px!important;border-top:1px solid var(--line)!important;display:grid!important;grid-template-columns:1fr auto auto!important;gap:35px!important;align-items:center!important;text-align:left!important;color:#6e6b64!important;font-size:9px!important}
+.footer-brand{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;order:initial!important}
+.footer-brand img,.footer-site-logo{width:155px!important;max-width:60vw!important;max-height:44px!important;object-fit:contain!important}
+.footer-brand div{display:grid!important;gap:2px!important;text-align:left!important}
+.footer-brand strong{color:#c7c3ba!important;font-size:11px!important}
+.footer-brand small{font-size:8px!important}
+.footer nav,.footer>nav{display:flex!important;justify-content:flex-start!important;align-items:center!important;gap:18px!important;flex-wrap:wrap!important;order:initial!important}
+.footer nav a{font-size:10px!important;font-weight:800!important}
+.footer-copy{order:initial!important;text-align:right!important;font-size:9px!important;width:auto!important;padding-top:0!important}
+@media(max-width:720px){.footer{padding:28px 20px 40px!important;grid-template-columns:1fr!important;gap:18px!important;text-align:center!important}.footer-brand{justify-content:center!important}.footer-brand div{text-align:center!important}.footer nav,.footer>nav{justify-content:center!important;gap:14px 18px!important}.footer-copy{text-align:center!important;width:100%!important}.footer-brand img,.footer-site-logo{width:155px!important;max-height:44px!important}}
