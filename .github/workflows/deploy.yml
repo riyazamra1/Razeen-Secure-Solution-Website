@@ -41,3 +41,20 @@ jobs:
             --rsync-path="sudo rsync" \
             -e "ssh $SSH_OPTS -o StrictHostKeyChecking=no" \
             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+          # The main page currently contains the markup but was missing the
+          # runtime scripts. Inject the small compatibility assets at deploy
+          # time so the mobile menu and appearance toggle are functional.
+          ssh $SSH_OPTS -o StrictHostKeyChecking=no "$DEPLOY_USER@$DEPLOY_HOST" "sudo python3 - '$DEPLOY_PATH/index.html' <<'PY'
+          import sys
+          from pathlib import Path
+          p=Path(sys.argv[1])
+          s=p.read_text(encoding='utf-8')
+          css='<link rel=\"stylesheet\" href=\"rss-main-compat.css?v=20260916\">'
+          js='<script src=\"rss-main-runtime.js?v=20260916\"></script>'
+          if 'rss-main-compat.css?v=20260916' not in s:
+              s=s.replace('</head>',css+'</head>',1)
+          if 'rss-main-runtime.js?v=20260916' not in s:
+              s=s.replace('</body>',js+'</body>',1)
+          p.write_text(s,encoding='utf-8')
+          PY"
