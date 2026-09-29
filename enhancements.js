@@ -90,3 +90,80 @@ const addPulse=(host,scale)=>{
 addPulse(document.querySelector('.hero-core'),'.48');
 addPulse(document.querySelector('.accomplishments-intro'),'.32');
 })();
+/* RSS navigation + appearance controls: explicit handlers so the site works even
+   when no framework/runtime is present. */
+(()=>{
+  const nav=document.querySelector('#mainNav');
+  const menu=document.querySelector('.menu-btn');
+  const theme=document.querySelector('.appearance-toggle');
+  const closeMenu=()=>{
+    if(!nav) return;
+    nav.classList.remove('open');
+    if(menu){menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Open menu');}
+  };
+  if(menu && nav){
+    menu.addEventListener('click',e=>{
+      e.preventDefault();
+      const open=!nav.classList.contains('open');
+      nav.classList.toggle('open',open);
+      menu.setAttribute('aria-expanded',String(open));
+      menu.setAttribute('aria-label',open?'Close menu':'Open menu');
+    });
+    nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
+    document.addEventListener('click',e=>{
+      if(!nav.classList.contains('open')) return;
+      if(!nav.contains(e.target) && !menu.contains(e.target)) closeMenu();
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape') closeMenu();});
+  }
+
+  if(theme){
+    if(!theme.querySelector('.knob')){
+      const knob=document.createElement('span');
+      knob.className='knob';
+      knob.setAttribute('aria-hidden','true');
+      theme.appendChild(knob);
+    }
+    const saved=localStorage.getItem('rss-theme');
+    const preferred=window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches;
+    const applyTheme=mode=>{
+      const dark=mode==='dark';
+      document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+      theme.classList.toggle('dark',dark);
+      theme.setAttribute('aria-label',dark?'Switch to light appearance':'Switch to dark appearance');
+      theme.setAttribute('aria-pressed',String(dark));
+    };
+    applyTheme(saved || (preferred?'light':'dark'));
+    theme.addEventListener('click',()=>{
+      const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+      applyTheme(next);
+      localStorage.setItem('rss-theme',next);
+    });
+  }
+
+  /* Make reveal animations deterministic instead of depending on a missing
+     IntersectionObserver setup. */
+  const revealAll=()=>{
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+  };
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('visible');io.unobserve(entry.target);}
+    }),{threshold:.06});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }else revealAll();
+  setTimeout(revealAll,1200);
+
+  /* Reliable same-page navigation on touch devices. */
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const id=a.getAttribute('href');
+    if(!id || id==='#') return;
+    const target=document.querySelector(id);
+    if(target){
+      e.preventDefault();
+      closeMenu();
+      target.scrollIntoView({behavior:'smooth',block:'start'});
+      history.replaceState(null,'',id);
+    }
+  }));
+})();
