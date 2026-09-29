@@ -77,26 +77,16 @@ document.querySelectorAll('.footer').forEach(footer=>{
 /* Rounded cards with theme-aware depth. */
 document.querySelectorAll('.glass-card,.glass-panel,.project-card,.accomplishment-card,.cap-grid article').forEach(card=>card.classList.add('rss-rounded-card'));
 
-/* Lottie Web Component: lightweight animated RSS accents. */
-if(!document.querySelector('script[data-rss-lottie]')){
-  const s=document.createElement('script');
-  s.src='https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
-  s.async=true;
-  s.dataset.rssLottie='1';
-  document.head.appendChild(s);
-}
-const addLottie=(host,scale)=>{
-  if(!host||host.querySelector('.rss-lottie-accent'))return;
-  const wrap=document.createElement('div');
-  wrap.className='rss-lottie-accent';
+/* Lightweight local RSS pulse accents — no third-party runtime dependency. */
+const addPulse=(host,scale)=>{
+  if(!host||host.querySelector('.rss-local-pulse'))return;
+  const wrap=document.createElement('span');
+  wrap.className='rss-local-pulse';
   wrap.setAttribute('aria-hidden','true');
-  wrap.innerHTML='<lottie-player class="rss-lottie-player" autoplay loop mode="normal"></lottie-player>';
+  wrap.style.setProperty('--rss-pulse-scale',scale||'.48');
+  wrap.innerHTML='<span></span>';
   host.appendChild(wrap);
-  const player=wrap.querySelector('lottie-player');
-  const data={v:'5.7.4',fr:30,ip:0,op:90,w:160,h:160,nm:'RSS Pulse',ddd:0,assets:[],layers:[{ddd:0,ind:1,ty:4,nm:'Pulse',sr:1,ks:{o:{a:0,k:34},r:{a:0,k:0},p:{a:0,k:[80,80,0]},a:{a:0,k:[0,0,0]},s:{a:1,k:[{t:0,s:[78,78,100]},{t:45,s:[105,105,100]},{t:90,s:[78,78,100]}]}},ao:0,shapes:[{ty:'gr',it:[{ty:'el',p:{a:0,k:[0,0]},s:{a:0,k:[58,58]}},{ty:'st',c:{a:0,k:[0.84,0.65,0.2,1]},o:{a:0,k:70},w:{a:0,k:2},lc:2,lj:1},{ty:'tr',p:{a:0,k:[0,0]},a:{a:0,k:[0,0]},s:{a:0,k:[100,100]},r:{a:0,k:0},o:{a:0,k:100},sk:{a:0,k:0},sa:{a:0,k:0}}]}],ip:0,op:90,st:0,bm:0}]};
-  player.load(JSON.stringify(data));
-  if(scale)wrap.style.setProperty('--rss-lottie-scale',scale);
 };
-addLottie(document.querySelector('.hero-core'),'.48');
-addLottie(document.querySelector('.accomplishments-intro'),'.32');
+addPulse(document.querySelector('.hero-core'),'.48');
+addPulse(document.querySelector('.accomplishments-intro'),'.32');
 })();
