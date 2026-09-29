@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout website
         uses: actions/checkout@v4
@@ -19,11 +19,13 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         run: |
+          set -e
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          timeout 10 ssh-keyscan -T 5 -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts || true
+          test -n "$DEPLOY_HOST"
+          timeout 15 ssh-keyscan -T 5 -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts || true
 
       - name: Deploy to aaPanel
         env:
@@ -32,29 +34,11 @@ jobs:
           DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          SSH_OPTS="-i ~/.ssh/deploy_key -p $DEPLOY_PORT -o ConnectTimeout=10 -o ServerAliveInterval=10 -o ServerAliveCountMax=3"
+          set -e
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_USER"
+          test -n "$DEPLOY_PORT"
+          test -n "$DEPLOY_PATH"
+          SSH_OPTS="-i ~/.ssh/deploy_key -p $DEPLOY_PORT -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=3"
           ssh $SSH_OPTS -o StrictHostKeyChecking=no "$DEPLOY_USER@$DEPLOY_HOST" "sudo mkdir -p '$DEPLOY_PATH'"
-          rsync -az --delete \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='.user.ini' \
-            --rsync-path="sudo rsync" \
-            -e "ssh $SSH_OPTS -o StrictHostKeyChecking=no" \
-            ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
-
-          # The main page currently contains the markup but was missing the
-          # runtime scripts. Inject the small compatibility assets at deploy
-          # time so the mobile menu and appearance toggle are functional.
-          ssh $SSH_OPTS -o StrictHostKeyChecking=no "$DEPLOY_USER@$DEPLOY_HOST" "sudo python3 - '$DEPLOY_PATH/index.html' <<'PY'
-          import sys
-          from pathlib import Path
-          p=Path(sys.argv[1])
-          s=p.read_text(encoding='utf-8')
-          css='<link rel=\"stylesheet\" href=\"rss-main-compat.css?v=20260916\">'
-          js='<script src=\"rss-main-runtime.js?v=20260916\"></script>'
-          if 'rss-main-compat.css?v=20260916' not in s:
-              s=s.replace('</head>',css+'</head>',1)
-          if 'rss-main-runtime.js?v=20260916' not in s:
-              s=s.replace('</body>',js+'</body>',1)
-          p.write_text(s,encoding='utf-8')
-          PY"
+          rsync -az --delete             --exclude='.git/'             --exclude='.github/'             --exclude='.user.ini'             --rsync-path="sudo rsync"             -e "ssh $SSH_OPTS -o StrictHostKeyChecking=no"             ./ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
