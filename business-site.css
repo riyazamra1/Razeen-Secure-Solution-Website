@@ -93,3 +93,56 @@ html[data-theme=dark] .nav a:hover,html[data-theme=dark] .nav a[aria-current=pag
 html[data-theme=dark] .menu-btn{background:#e6c27e;color:#101c2b;border-color:#e6c27e}
 html[data-theme=dark] .journey-card,html[data-theme=dark] .assurance-card{background:#172536;border-color:#2d3a4a}
 html[data-theme=dark] .journey-card p,html[data-theme=dark] .assurance-card p,html[data-theme=dark] .assurance-card li{color:#b5c0cc}
+
+/* Visual camera-placement gallery and concise customer outcomes */
+.camera-placement{background:linear-gradient(145deg,#f7f8fa 0%,#eef2f5 100%)}
+.camera-placement .section{padding-top:74px;padding-bottom:74px}
+.camera-placement .section-heading{margin-bottom:26px}
+.camera-placement .section-heading p{max-width:520px}
+.camera-placement .placement-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:24px 0}
+.placement-card{padding:0;overflow:hidden;border:1px solid #dce3e8;border-top:0;border-radius:12px;background:#fff;box-shadow:0 12px 30px rgba(16,28,43,.07);transition:transform .25s ease,box-shadow .25s ease}
+.placement-card:hover{transform:translateY(-5px);box-shadow:0 20px 42px rgba(16,28,43,.13)}
+.placement-visual{position:relative;height:158px;overflow:hidden;background:linear-gradient(135deg,#dce7e9,#f2eadc)}
+.placement-visual svg{display:block;width:100%;height:100%;transition:transform .45s ease}
+.placement-card:hover .placement-visual svg{transform:scale(1.045)}
+.placement-tag{position:absolute;left:12px;bottom:11px;padding:6px 9px;border-radius:4px;background:rgba(16,28,43,.86);color:#fff;font-size:9px;font-weight:850;letter-spacing:.12em}
+.placement-copy{position:relative;padding:17px 18px 19px}
+.placement-number{top:16px;right:16px;color:#aab5bf}
+.placement-copy h3{margin:0 32px 6px 0;font-size:17px}
+.placement-copy p{margin:0;color:#657181;font-size:13px;line-height:1.45}
+.placement-foot{display:flex;align-items:center;justify-content:space-between;gap:18px;padding-top:6px}
+.placement-foot>span{color:#697583;font-size:12px}
+.placement-foot .btn{min-height:44px}
+.btn{position:relative;isolation:isolate;overflow:hidden;transition:transform .22s cubic-bezier(.2,.8,.2,1),background .22s,box-shadow .22s,border-color .22s}
+.btn:after{content:"";position:absolute;inset:-1px auto -1px -65%;width:42%;z-index:-1;background:linear-gradient(100deg,transparent,rgba(255,255,255,.42),transparent);transform:skewX(-20deg);transition:left .55s ease}
+.btn:hover:after{left:130%}
+.btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(16,28,43,.18)}
+.btn:active{transform:translateY(0) scale(.97);box-shadow:0 5px 12px rgba(16,28,43,.14)}
+.btn-primary{background:linear-gradient(110deg,#bd8d3d,#e0bb73,#bd8d3d);background-size:200% 100%;transition:background-position .5s ease,transform .22s,box-shadow .22s}
+.btn-primary:hover{background-position:100% 0}
+.btn-outline:hover{border-color:#e2bd76;box-shadow:0 12px 24px rgba(0,0,0,.14)}
+.form-submit{transition:transform .22s,box-shadow .22s,background .22s}
+.menu-btn,.appearance-toggle{transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.menu-btn:hover,.appearance-toggle:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(16,28,43,.14)}
+.menu-btn:active,.appearance-toggle:active{transform:scale(.96)}
+.appearance-toggle{width:auto!important;min-width:64px!important;padding:0 10px!important;font-size:11px!important;font-weight:800!important;border-radius:8px!important}
+.menu-btn{font-size:12px!important;font-weight:800!important}
+.journey-grid{gap:12px}
+.journey-card{min-height:174px;border-radius:10px}
+.journey-card p{font-size:13px;line-height:1.5}
+.result-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.result-cards article{display:grid;grid-template-columns:42px 1fr;column-gap:12px;align-items:center;padding:16px 18px;border:1px solid var(--line);border-radius:9px;background:var(--soft)}
+.result-mark{grid-row:span 2;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--navy);color:#e6c27e;font-size:11px;font-weight:900}
+.result-cards strong{color:var(--ink);font-size:14px}
+.result-cards article>span:last-child{color:var(--muted);font-size:11px}
+.review-panel{border-radius:12px}
+.review-stars{color:#b7c0ca;letter-spacing:5px;font-size:28px}
+.review-brand{font-size:17px}
+html[data-theme=dark] .camera-placement{background:linear-gradient(145deg,#172536,#111b28)}
+html[data-theme=dark] .placement-card{background:#172536;border-color:#2d3a4a}
+html[data-theme=dark] .placement-copy p,html[data-theme=dark] .placement-foot>span{color:#b5c0cc}
+html[data-theme=dark] .result-cards article{background:#172536;border-color:#2d3a4a}
+html[data-theme=dark] .result-cards strong{color:#edf2f7}
+@media(max-width:900px){.camera-placement .placement-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){.camera-placement .section{padding-top:58px;padding-bottom:58px}.camera-placement .placement-grid{grid-template-columns:1fr}.placement-visual{height:174px}.placement-foot{align-items:flex-start;flex-direction:column}.result-cards{grid-template-columns:1fr}.appearance-toggle{min-width:58px!important}}
+@media(prefers-reduced-motion:reduce){.btn,.btn:after,.placement-card,.placement-visual svg,.menu-btn,.appearance-toggle{transition:none!important}.btn:after{display:none}}
