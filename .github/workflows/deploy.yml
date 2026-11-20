@@ -55,7 +55,7 @@ jobs:
           test -n "$DEPLOY_PATH"
           SSH_OPTS="-i ~/.ssh/deploy_key -p $DEPLOY_PORT -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=10 -o ServerAliveCountMax=3 -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts"
           ssh $SSH_OPTS "$DEPLOY_USER@$DEPLOY_HOST" "sudo mkdir -p '$DEPLOY_PATH'"
-          rsync -az --delete \
+          rsync -az \
             --exclude='.git/' \
             --exclude='.github/' \
             --exclude='.user.ini' \
